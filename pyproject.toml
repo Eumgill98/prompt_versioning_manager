@@ -9,6 +9,7 @@ description = "Prompt version management library"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+  "fastmcp>=3.2.0",
   "PyYAML>=6.0",
   "typer>=0.12,<1.0",
 ]
@@ -28,6 +29,7 @@ server = [
 [project.scripts]
 pvm = "pvm.cli:main"
 pvm-server = "server.main:main"
+pvm-mcp = "pvm.mcp.server:main"
 
 [tool.setuptools.packages.find]
 where = ["."]

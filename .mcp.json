@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "pvm": {
+      "type": "stdio",
+      "command": "prompt_versioning_manager/run_pvm_mcp.sh",
+      "args": [],
+      "env": {}
+    },
+    "promptfoo": {
+      "type": "stdio",
+      "command": "wsl",
+      "args": [
+        "bash",
+        "-lc",
+        "npx -y promptfoo@latest mcp --transport stdio"
+      ],
+      "env": {}
+    }
+  }
+}

@@ -1,7 +1,15 @@
 *__pycache__*
 
 .pvm
+.pvm_copy
 .pytest_cache
 build/
 dist/
 *.egg-info/
+
+guides/
+guides_plan/
+prompts/
+
+.venv
+uv.lock
