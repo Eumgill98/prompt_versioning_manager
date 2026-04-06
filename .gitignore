@@ -1,15 +1,22 @@
+# 캐쉬
 *__pycache__*
-
-.pvm
-.pvm_copy
 .pytest_cache
+
+#
 build/
 dist/
 *.egg-info/
 
+# 개발용 가이드
 guides/
 guides_plan/
-prompts/
 
+# 가상환경 관련
 .venv
 uv.lock
+
+# 테스트용 폴더 & 파일
+.pvm
+.pvm_copy
+export_snapshots/
+prompts/
