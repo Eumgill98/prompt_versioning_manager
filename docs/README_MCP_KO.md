@@ -91,26 +91,52 @@ poetry run pvm-mcp
 
 ## Claude Code 연동
 
-### `.mcp.json` (프로젝트 로컬)
+프로젝트 루트에 `.mcp.json` 파일을 생성합니다. OS와 Python 환경에 따라 설정이 다릅니다.
 
-프로젝트 루트에 `.mcp.json` 파일을 생성합니다.
+> **`/path/to/repo`** 는 실제 저장소 절대 경로로 대체하세요.
+> Windows 예시: `C:/Users/yourname/repos/prompt_versioning_manager`
+> Linux/Mac 예시: `/home/yourname/repos/prompt_versioning_manager`
 
-**WSL 환경 (Windows):**
+---
+
+### Windows (네이티브, WSL 미사용)
+
+Claude Code가 Windows 네이티브 환경에서 실행될 때의 설정입니다.
+
+#### 일반 환경 (venv / 전역 pip)
 
 ```json
 {
   "mcpServers": {
     "pvm": {
       "type": "stdio",
-      "command": "wsl",
-      "args": ["bash", "-lc", "./run_pvm_mcp.sh"],
-      "env": {}
+      "command": "C:/path/to/venv/Scripts/python.exe",
+      "args": ["-m", "pvm.mcp.server"],
+      "cwd": "C:/path/to/repo"
     }
   }
 }
 ```
 
-**Linux / macOS (uv):**
+> 전역 pip로 설치한 경우 `command`를 `python`으로, 가상환경을 사용한다면 해당 venv의 `python.exe` 절대 경로로 지정합니다.
+
+#### pipx
+
+```json
+{
+  "mcpServers": {
+    "pvm": {
+      "type": "stdio",
+      "command": "pvm-mcp",
+      "cwd": "C:/path/to/repo"
+    }
+  }
+}
+```
+
+> `pipx install ".[server]"` 후 `pvm-mcp`가 전역 명령으로 등록됩니다.
+
+#### uv
 
 ```json
 {
@@ -118,26 +144,175 @@ poetry run pvm-mcp
     "pvm": {
       "type": "stdio",
       "command": "uv",
-      "args": ["run", "pvm-mcp"]
+      "args": ["run", "pvm-mcp"],
+      "cwd": "C:/path/to/repo"
     }
   }
 }
 ```
 
-**Linux / macOS (pipx):**
+#### poetry
 
 ```json
 {
   "mcpServers": {
     "pvm": {
       "type": "stdio",
-      "command": "pvm-mcp"
+      "command": "poetry",
+      "args": ["run", "pvm-mcp"],
+      "cwd": "C:/path/to/repo"
     }
   }
 }
 ```
 
-`pipx install ".[server]"`로 설치하면 `pvm-mcp`가 전역 명령어로 등록되므로 `uv run` 없이 직접 사용할 수 있습니다.
+---
+
+### Windows + WSL
+
+Claude Code가 Windows에서 실행되지만 WSL 내부의 Python 환경을 사용할 때의 설정입니다.
+`command`는 항상 `wsl`이고, 실제 실행 방식은 `args`에서 결정됩니다.
+
+> WSL 경로 예시: `/home/yourname/repos/prompt_versioning_manager`
+
+#### 일반 환경 (venv / 전역 pip)
+
+```json
+{
+  "mcpServers": {
+    "pvm": {
+      "type": "stdio",
+      "command": "wsl",
+      "args": ["bash", "-lc", "cd /path/to/repo && .venv/bin/python -m pvm.mcp.server"]
+    }
+  }
+}
+```
+
+> 전역 pip로 설치한 경우 `.venv/bin/python` 대신 `python3`을 사용합니다.
+
+#### pipx
+
+```json
+{
+  "mcpServers": {
+    "pvm": {
+      "type": "stdio",
+      "command": "wsl",
+      "args": ["bash", "-lc", "pvm-mcp"]
+    }
+  }
+}
+```
+
+#### uv
+
+```json
+{
+  "mcpServers": {
+    "pvm": {
+      "type": "stdio",
+      "command": "wsl",
+      "args": ["bash", "-lc", "cd /path/to/repo && uv run pvm-mcp"]
+    }
+  }
+}
+```
+
+`run_pvm_mcp.sh` 헬퍼 스크립트를 사용하면 uv → pipx 순으로 자동 탐색합니다.
+
+```json
+{
+  "mcpServers": {
+    "pvm": {
+      "type": "stdio",
+      "command": "wsl",
+      "args": ["bash", "-lc", "/path/to/repo/run_pvm_mcp.sh"]
+    }
+  }
+}
+```
+
+#### poetry
+
+```json
+{
+  "mcpServers": {
+    "pvm": {
+      "type": "stdio",
+      "command": "wsl",
+      "args": ["bash", "-lc", "cd /path/to/repo && poetry run pvm-mcp"]
+    }
+  }
+}
+```
+
+---
+
+### Linux / macOS
+
+#### 일반 환경 (venv / 전역 pip)
+
+```json
+{
+  "mcpServers": {
+    "pvm": {
+      "type": "stdio",
+      "command": "/path/to/repo/.venv/bin/python",
+      "args": ["-m", "pvm.mcp.server"],
+      "cwd": "/path/to/repo"
+    }
+  }
+}
+```
+
+> 전역 pip로 설치한 경우 `command`를 `python3`으로 지정합니다.
+
+#### pipx
+
+```json
+{
+  "mcpServers": {
+    "pvm": {
+      "type": "stdio",
+      "command": "pvm-mcp",
+      "cwd": "/path/to/repo"
+    }
+  }
+}
+```
+
+#### uv
+
+```json
+{
+  "mcpServers": {
+    "pvm": {
+      "type": "stdio",
+      "command": "uv",
+      "args": ["run", "pvm-mcp"],
+      "cwd": "/path/to/repo"
+    }
+  }
+}
+```
+
+#### poetry
+
+```json
+{
+  "mcpServers": {
+    "pvm": {
+      "type": "stdio",
+      "command": "poetry",
+      "args": ["run", "pvm-mcp"],
+      "cwd": "/path/to/repo"
+    }
+  }
+}
+```
+
+---
 
 ### `run_pvm_mcp.sh`
 

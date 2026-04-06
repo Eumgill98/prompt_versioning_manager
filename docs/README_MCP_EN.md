@@ -91,26 +91,52 @@ poetry run pvm-mcp
 
 ## Connect to Claude Code
 
-### `.mcp.json` (project-local)
+Place `.mcp.json` in the project root. The configuration differs by OS and Python environment.
 
-Place `.mcp.json` in the project root.
+> Replace **`/path/to/repo`** with the actual absolute path to your repository.
+> Windows example: `C:/Users/yourname/repos/prompt_versioning_manager`
+> Linux/Mac example: `/home/yourname/repos/prompt_versioning_manager`
 
-**WSL on Windows:**
+---
+
+### Windows (native, no WSL)
+
+Use this when Claude Code runs directly in the Windows native environment.
+
+#### Standard environment (venv / global pip)
 
 ```json
 {
   "mcpServers": {
     "pvm": {
       "type": "stdio",
-      "command": "wsl",
-      "args": ["bash", "-lc", "./run_pvm_mcp.sh"],
-      "env": {}
+      "command": "C:/path/to/venv/Scripts/python.exe",
+      "args": ["-m", "pvm.mcp.server"],
+      "cwd": "C:/path/to/repo"
     }
   }
 }
 ```
 
-**Linux / macOS (uv):**
+> For a global pip install, set `command` to `python`. For a venv, use the absolute path to the venv's `python.exe`.
+
+#### pipx
+
+```json
+{
+  "mcpServers": {
+    "pvm": {
+      "type": "stdio",
+      "command": "pvm-mcp",
+      "cwd": "C:/path/to/repo"
+    }
+  }
+}
+```
+
+> After `pipx install ".[server]"`, `pvm-mcp` is registered as a global command.
+
+#### uv
 
 ```json
 {
@@ -118,26 +144,175 @@ Place `.mcp.json` in the project root.
     "pvm": {
       "type": "stdio",
       "command": "uv",
-      "args": ["run", "pvm-mcp"]
+      "args": ["run", "pvm-mcp"],
+      "cwd": "C:/path/to/repo"
     }
   }
 }
 ```
 
-**Linux / macOS (pipx):**
+#### poetry
 
 ```json
 {
   "mcpServers": {
     "pvm": {
       "type": "stdio",
-      "command": "pvm-mcp"
+      "command": "poetry",
+      "args": ["run", "pvm-mcp"],
+      "cwd": "C:/path/to/repo"
     }
   }
 }
 ```
 
-`pipx install ".[server]"` installs `pvm-mcp` as a global command, so it can be used directly without `uv run`.
+---
+
+### Windows + WSL
+
+Use this when Claude Code runs on Windows but the Python environment lives inside WSL.
+`command` is always `wsl`; the actual execution method is determined by `args`.
+
+> WSL path example: `/home/yourname/repos/prompt_versioning_manager`
+
+#### Standard environment (venv / global pip)
+
+```json
+{
+  "mcpServers": {
+    "pvm": {
+      "type": "stdio",
+      "command": "wsl",
+      "args": ["bash", "-lc", "cd /path/to/repo && .venv/bin/python -m pvm.mcp.server"]
+    }
+  }
+}
+```
+
+> For a global pip install, replace `.venv/bin/python` with `python3`.
+
+#### pipx
+
+```json
+{
+  "mcpServers": {
+    "pvm": {
+      "type": "stdio",
+      "command": "wsl",
+      "args": ["bash", "-lc", "pvm-mcp"]
+    }
+  }
+}
+```
+
+#### uv
+
+```json
+{
+  "mcpServers": {
+    "pvm": {
+      "type": "stdio",
+      "command": "wsl",
+      "args": ["bash", "-lc", "cd /path/to/repo && uv run pvm-mcp"]
+    }
+  }
+}
+```
+
+Using the `run_pvm_mcp.sh` helper script auto-detects uv, falling back to pipx:
+
+```json
+{
+  "mcpServers": {
+    "pvm": {
+      "type": "stdio",
+      "command": "wsl",
+      "args": ["bash", "-lc", "/path/to/repo/run_pvm_mcp.sh"]
+    }
+  }
+}
+```
+
+#### poetry
+
+```json
+{
+  "mcpServers": {
+    "pvm": {
+      "type": "stdio",
+      "command": "wsl",
+      "args": ["bash", "-lc", "cd /path/to/repo && poetry run pvm-mcp"]
+    }
+  }
+}
+```
+
+---
+
+### Linux / macOS
+
+#### Standard environment (venv / global pip)
+
+```json
+{
+  "mcpServers": {
+    "pvm": {
+      "type": "stdio",
+      "command": "/path/to/repo/.venv/bin/python",
+      "args": ["-m", "pvm.mcp.server"],
+      "cwd": "/path/to/repo"
+    }
+  }
+}
+```
+
+> For a global pip install, set `command` to `python3`.
+
+#### pipx
+
+```json
+{
+  "mcpServers": {
+    "pvm": {
+      "type": "stdio",
+      "command": "pvm-mcp",
+      "cwd": "/path/to/repo"
+    }
+  }
+}
+```
+
+#### uv
+
+```json
+{
+  "mcpServers": {
+    "pvm": {
+      "type": "stdio",
+      "command": "uv",
+      "args": ["run", "pvm-mcp"],
+      "cwd": "/path/to/repo"
+    }
+  }
+}
+```
+
+#### poetry
+
+```json
+{
+  "mcpServers": {
+    "pvm": {
+      "type": "stdio",
+      "command": "poetry",
+      "args": ["run", "pvm-mcp"],
+      "cwd": "/path/to/repo"
+    }
+  }
+}
+```
+
+---
 
 ### `run_pvm_mcp.sh`
 
