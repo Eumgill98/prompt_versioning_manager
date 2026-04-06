@@ -9,6 +9,26 @@ It provides:
 - snapshot create / read / export / diff tools
 - a `stdio`-based MCP transport via FastMCP
 
+## Setup
+
+If this is your first time, follow these steps in order.
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/OWNER/REPO.git
+cd REPO
+
+# 2. Install uv (skip if already installed)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# 3. Verify the server runs
+uv run pvm-mcp --help
+```
+
+To use with Claude Code, register `.mcp.json` in the project root. See the [Connect to Claude Code](#connect-to-claude-code) section below.
+
+---
+
 ## Install
 
 ### Recommended: `uv`

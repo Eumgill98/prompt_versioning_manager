@@ -9,6 +9,26 @@
 - 스냅샷 생성 / 조회 / 내보내기 / 비교 도구
 - FastMCP 기반 `stdio` 전송
 
+## 셋업 순서
+
+처음 사용하는 경우 아래 순서를 따릅니다.
+
+```bash
+# 1. 저장소 클론
+git clone https://github.com/OWNER/REPO.git
+cd REPO
+
+# 2. uv 설치 (이미 설치되어 있으면 생략)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# 3. 서버 실행 확인
+uv run pvm-mcp --help
+```
+
+Claude Code에서 사용하려면 프로젝트 루트의 `.mcp.json`을 등록합니다. 자세한 내용은 아래 [Claude Code 연동](#claude-code-연동) 섹션을 참고하세요.
+
+---
+
 ## 설치
 
 ### 권장: `uv`
