@@ -11,11 +11,13 @@ It provides:
 
 ## Setup
 
-If this is your first time, follow these steps in order.
+If this is your first time, choose one of the following methods.
+
+### uv (recommended)
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/OWNER/REPO.git
+git clone https://github.com/Eumgill98/prompt_versioning_manager.git
 cd REPO
 
 # 2. Install uv (skip if already installed)
@@ -23,6 +25,38 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # 3. Verify the server runs
 uv run pvm-mcp --help
+```
+
+### pipx
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/Eumgill98/prompt_versioning_manager.git
+cd REPO
+
+# 2. Install pipx (skip if already installed)
+pip install pipx
+pipx ensurepath
+
+# 3. Install pvm-mcp
+pipx install ".[server]"
+
+# 4. Verify the server runs
+pvm-mcp --help
+```
+
+### Poetry (local development)
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/Eumgill98/prompt_versioning_manager.git
+cd REPO
+
+# 2. Install dependencies
+poetry install -E server
+
+# 3. Verify the server runs
+poetry run pvm-mcp --help
 ```
 
 To use with Claude Code, register `.mcp.json` in the project root. See the [Connect to Claude Code](#connect-to-claude-code) section below.
@@ -39,12 +73,6 @@ Run directly from the project root without a separate install step:
 uv run pvm-mcp
 ```
 
-Point to a specific pvm project:
-
-```bash
-uv run pvm-mcp --root /path/to/your/project
-```
-
 ### `pipx`
 
 Install with the `server` extra:
@@ -52,7 +80,6 @@ Install with the `server` extra:
 ```bash
 pipx install ".[server]"
 pvm-mcp
-pvm-mcp --root /path/to/your/project
 ```
 
 ### Poetry (local development)
@@ -91,7 +118,7 @@ Place `.mcp.json` in the project root.
     "pvm": {
       "type": "stdio",
       "command": "uv",
-      "args": ["run", "pvm-mcp", "--root", "/path/to/your/project"]
+      "args": ["run", "pvm-mcp"]
     }
   }
 }
@@ -104,8 +131,7 @@ Place `.mcp.json` in the project root.
   "mcpServers": {
     "pvm": {
       "type": "stdio",
-      "command": "pvm-mcp",
-      "args": ["--root", "/path/to/your/project"]
+      "command": "pvm-mcp"
     }
   }
 }

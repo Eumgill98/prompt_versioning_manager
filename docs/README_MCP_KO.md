@@ -11,11 +11,13 @@
 
 ## 셋업 순서
 
-처음 사용하는 경우 아래 순서를 따릅니다.
+처음 사용하는 경우 아래 방법 중 하나를 따릅니다.
+
+### uv (권장)
 
 ```bash
 # 1. 저장소 클론
-git clone https://github.com/OWNER/REPO.git
+git clone https://github.com/Eumgill98/prompt_versioning_manager.git
 cd REPO
 
 # 2. uv 설치 (이미 설치되어 있으면 생략)
@@ -23,6 +25,38 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # 3. 서버 실행 확인
 uv run pvm-mcp --help
+```
+
+### pipx
+
+```bash
+# 1. 저장소 클론
+git clone https://github.com/Eumgill98/prompt_versioning_manager.git
+cd REPO
+
+# 2. pipx 설치 (이미 설치되어 있으면 생략)
+pip install pipx
+pipx ensurepath
+
+# 3. pvm-mcp 설치
+pipx install ".[server]"
+
+# 4. 서버 실행 확인
+pvm-mcp --help
+```
+
+### Poetry (로컬 개발)
+
+```bash
+# 1. 저장소 클론
+git clone https://github.com/Eumgill98/prompt_versioning_manager.git
+cd REPO
+
+# 2. 의존성 설치
+poetry install -E server
+
+# 3. 서버 실행 확인
+poetry run pvm-mcp --help
 ```
 
 Claude Code에서 사용하려면 프로젝트 루트의 `.mcp.json`을 등록합니다. 자세한 내용은 아래 [Claude Code 연동](#claude-code-연동) 섹션을 참고하세요.
@@ -39,12 +73,6 @@ Claude Code에서 사용하려면 프로젝트 루트의 `.mcp.json`을 등록�
 uv run pvm-mcp
 ```
 
-특정 pvm 프로젝트 경로를 지정하려면:
-
-```bash
-uv run pvm-mcp --root /path/to/your/project
-```
-
 ### `pipx`
 
 `server` extra를 포함해 설치합니다.
@@ -52,7 +80,6 @@ uv run pvm-mcp --root /path/to/your/project
 ```bash
 pipx install ".[server]"
 pvm-mcp
-pvm-mcp --root /path/to/your/project
 ```
 
 ### Poetry (로컬 개발)
@@ -91,7 +118,7 @@ poetry run pvm-mcp
     "pvm": {
       "type": "stdio",
       "command": "uv",
-      "args": ["run", "pvm-mcp", "--root", "/path/to/your/project"]
+      "args": ["run", "pvm-mcp"]
     }
   }
 }
@@ -104,8 +131,7 @@ poetry run pvm-mcp
   "mcpServers": {
     "pvm": {
       "type": "stdio",
-      "command": "pvm-mcp",
-      "args": ["--root", "/path/to/your/project"]
+      "command": "pvm-mcp"
     }
   }
 }
