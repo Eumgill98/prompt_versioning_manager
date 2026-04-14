@@ -2,10 +2,18 @@
 *__pycache__*
 .pytest_cache
 
+# claude code
+.agents/
+.claude/
+
 #
 build/
 dist/
 *.egg-info/
+promptfoo_examples/
+promptfooconfig_docs/
+.env
+judge_prompt_generation/
 
 # 개발용 가이드
 guides/
@@ -19,4 +27,6 @@ uv.lock
 .pvm
 .pvm_copy
 export_snapshots/
+tests/
+data/
 prompts/
